@@ -1,0 +1,6 @@
+/build/**
+/coverage/**
+/**/build/**
+/browser.js
+/server.js
+/fixparser.js
