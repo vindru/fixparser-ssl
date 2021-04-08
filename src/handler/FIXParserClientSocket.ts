@@ -22,7 +22,6 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
     }
 
     public connect() {
-
         const options = {
             // Necessary only if using the client certificate authentication
             key: fs.readFileSync('etf_key.pem'),
@@ -41,66 +40,31 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             process.stdin.pipe(this.socket);
             process.stdin.resume();
         });
-        this.socket.setEncoding('utf8');
-        this.socket.on('data', (data: any) => {
+        this.socket!.setEncoding('utf8');
+        this.socket!.on('data', (data: any) => {
+            console.log('Parser received: ',data);
             this.eventEmitter!.emit('message', data);
         });
 
-        this.socket.on('error', (error: any) => {
+        this.socket!.on('error', (error: any) => {
+            console.log('Parser error: ',error);
             this.connected = false;
             this.eventEmitter!.emit('error', error);
             this.stopHeartbeat();
         });
 
-        this.socket.on('close', () => {
+        this.socket!.on('close', () => {
             this.connected = false;
             this.eventEmitter!.emit('close');
             this.stopHeartbeat();
         });
 
-        this.socket.on('timeout', () => {
+        this.socket!.on('timeout', () => {
             this.connected = false;
             this.eventEmitter!.emit('timeout');
             this.socketTCP!.end();
             this.stopHeartbeat();
         });
-
-        // this.socketTCP = new Socket();
-        // this.socketTCP!.setEncoding('ascii');
-        // this.socketTCP!.pipe(new FrameDecoder()).on('data', (data: any) => {
-        //     const messages: Message[] = this.fixParser!.parse(data.toString());
-        //     let i = 0;
-        //     for (i; i < messages.length; i++) {
-        //         this.processMessage(messages[i]);
-        //         this.eventEmitter!.emit('message', messages[i]);
-        //     }
-        // });
-
-        // this.socketTCP!.on('close', () => {
-        //     this.connected = false;
-        //     this.eventEmitter!.emit('close');
-        //     this.stopHeartbeat();
-        // });
-
-        // this.socketTCP!.on('error', (error) => {
-        //     this.connected = false;
-        //     this.eventEmitter!.emit('error', error);
-        //     this.stopHeartbeat();
-        // });
-
-        // this.socketTCP!.on('timeout', () => {
-        //     this.connected = false;
-        //     this.eventEmitter!.emit('timeout');
-        //     this.socketTCP!.end();
-        //     this.stopHeartbeat();
-        // });
-
-        // this.socketTCP!.connect(this.port!, this.host!, () => {
-        //     this.connected = true;
-        //     console.log('Connected');
-        //     this.eventEmitter!.emit('open');
-        //     this.startHeartbeat();
-        // });
     }
 
     public close() {
