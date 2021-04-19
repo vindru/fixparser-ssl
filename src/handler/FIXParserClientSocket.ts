@@ -62,14 +62,14 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
         this.socket!.on('timeout', () => {
             this.connected = false;
             this.eventEmitter!.emit('timeout');
-            this.socketTCP!.end();
+            this.socket!.end();
             this.stopHeartbeat();
         });
     }
 
     public close() {
-        if (this.socketTCP) {
-            this.socketTCP!.destroy();
+        if (this.socket) {
+            this.socket!.destroy();
         } else {
             console.error(
                 'FIXParserClientSocket: could not close socket, connection not open',
