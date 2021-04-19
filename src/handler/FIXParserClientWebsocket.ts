@@ -64,4 +64,7 @@ export default class FIXParserClientWebsocket extends FIXParserClientBase {
             );
         }
     }
+    public isConnected(){
+        return true;
+    }
 }

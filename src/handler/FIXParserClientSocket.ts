@@ -90,4 +90,7 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             );
         }
     }
+    public isConnected(){
+        return this.connected;
+    }
 }
