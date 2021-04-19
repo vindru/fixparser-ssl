@@ -59,6 +59,8 @@ export default class FIXParser extends EventEmitter {
             this.clientHandler = new FIXParserClientSocket(this, this);
         } else if (protocol === 'websocket') {
             this.clientHandler = new FIXParserClientWebsocket(this, this);
+        } else {
+            this.clientHandler = new FIXParserClientSocket(this, this);
         }
         this.clientHandler!.host = host;
         this.clientHandler!.port = port;

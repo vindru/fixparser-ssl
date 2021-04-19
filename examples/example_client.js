@@ -16,6 +16,7 @@ const TARGET = 'AACAPAUETFC';
 function sendLogon() {
 
     fixParser.setNextTargetMsgSeqNum(186);
+    console.log(fixParser.isConnected());
     console.log(fixParser.getNextTargetMsgSeqNum());
     const logon = fixParser.createMessage(
         new Field(Fields.BeginString, 'FIXT.1.1'),
@@ -42,6 +43,8 @@ fixParser.connect({
     target: TARGET,
     fixVersion: 'FIXT.1.1'
 });
+
+console.log(fixParser.isConnected());
 
 fixParser.on('open', async () => {
     console.log('Open');
