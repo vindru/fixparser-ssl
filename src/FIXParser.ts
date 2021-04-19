@@ -101,6 +101,9 @@ export default class FIXParser extends EventEmitter {
         }
         return this.clientHandler!.isConnected();
     }
+    public disconnect(){
+        this.clientHandler!.close();
+    }
 }
 
 export { Field };
