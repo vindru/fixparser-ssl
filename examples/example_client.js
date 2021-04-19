@@ -35,14 +35,7 @@ function sendLogon() {
     
 }
 
-fixParser.connect({
-    host: 'localhost',
-    port: 9878,
-    protocol: 'tcp',
-    sender: SENDER,
-    target: TARGET,
-    fixVersion: 'FIXT.1.1'
-});
+
 
 console.log(fixParser.isConnected());
 
