@@ -69,7 +69,9 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
 
     public close() {
         if (this.socket) {
+            this.socket!.removeAllListeners('message');
             this.socket!.removeAllListeners('end');
+            this.socket!.removeAllListeners('');
             this.socket!.destroy();
         } else {
             console.error(
