@@ -13,6 +13,7 @@ import Message from '../message/Message';
 import FIXParserClientBase from './FIXParserClientBase';
 import tls, { TLSSocket } from 'tls';
 import fs from 'fs';
+import FrameDecoder from '../util/FrameDecoder';
 
 export default class FIXParserClientSocket extends FIXParserClientBase {
     private connected: boolean = false;
@@ -35,15 +36,14 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             this.startHeartbeat();
             console.log('client connected',
                 this.socket.authorized ? 'authorized' : 'unauthorized');
-            process.stdin.pipe(this.socket);
-            process.stdin.resume();
+
+            this.socket!.pipe(new FrameDecoder()).on('data', (data: any) => {
+                console.log('Parser received: ', data);
+                this.eventEmitter!.emit('message', data);
+            });
             this.eventEmitter!.emit('open');
         });
         this.socket!.setEncoding('utf8');
-        this.socket!.once('data', (data: any) => {
-            console.log('Parser received: ',data);
-            this.eventEmitter!.emit('message', data);
-        });
 
         this.socket!.once('error', (error: any) => {
             console.log('Parser error: ',this.socket);
