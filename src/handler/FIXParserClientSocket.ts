@@ -46,7 +46,7 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
         });
 
         this.socket!.once('error', (error: any) => {
-            console.log('Parser error: ',error);
+            console.log('Parser error: ',this.socket);
             this.connected = false;
             this.eventEmitter!.emit('error', error);
             this.stopHeartbeat();
@@ -87,8 +87,7 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             this.socket!.write(message.encode());
         } else {
             console.error(
-                'FIXParserClientSocket: could not send message, socket not open',
-                message,
+                'FIXParserClientSocket: could not send message, socket not open'
             );
         }
     }
