@@ -52,7 +52,8 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             this.stopHeartbeat();
         });
 
-        this.socket!.once('close', () => {
+        this.socket!.once('close', (cl: any) => {
+            console.log('asdasdasdasdasdasdasdasdasdasdasdasdasdasdassadasdasdasdasdasads',cl);
             this.connected = false;
             this.eventEmitter!.emit('close');
             this.stopHeartbeat();
