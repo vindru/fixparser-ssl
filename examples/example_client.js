@@ -38,7 +38,14 @@ function sendLogon() {
 
 
 console.log(fixParser.isConnected());
-
+fixParser.connect({
+    host: config.get('fixServer.URL'),
+    port: config.get('fixServer.PORT'),
+    protocol: 'tcp',
+    sender: config.get('fixServer.SENDER'),
+    target: config.get('fixServer.TARGET'),
+    fixVersion: 'FIXT.1.1',
+  });
 fixParser.on('open', async () => {
     console.log('Open');
 

@@ -31,35 +31,34 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
 
         this.socket = tls.connect(443, '43.251.241.22', options, () => {
             this.connected = true;
-
+            console.log('socket::', this.socket);
             this.eventEmitter!.emit('open');
             this.startHeartbeat();
             console.log('client connected',
                 this.socket.authorized ? 'authorized' : 'unauthorized');
-
             process.stdin.pipe(this.socket);
             process.stdin.resume();
         });
         this.socket!.setEncoding('utf8');
-        this.socket!.on('data', (data: any) => {
+        this.socket!.once('data', (data: any) => {
             console.log('Parser received: ',data);
             this.eventEmitter!.emit('message', data);
         });
 
-        this.socket!.on('error', (error: any) => {
+        this.socket!.once('error', (error: any) => {
             console.log('Parser error: ',error);
             this.connected = false;
             this.eventEmitter!.emit('error', error);
             this.stopHeartbeat();
         });
 
-        this.socket!.on('close', () => {
+        this.socket!.once('close', () => {
             this.connected = false;
             this.eventEmitter!.emit('close');
             this.stopHeartbeat();
         });
 
-        this.socket!.on('timeout', () => {
+        this.socket!.once('timeout', () => {
             this.connected = false;
             this.eventEmitter!.emit('timeout');
             this.socket!.end();
@@ -85,7 +84,7 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             this.fixParser!.setNextTargetMsgSeqNum(
                 this.fixParser!.getNextTargetMsgSeqNum() + 1,
             );
-            this.socket.write(message.encode());
+            this.socket!.write(message.encode());
         } else {
             console.error(
                 'FIXParserClientSocket: could not send message, socket not open',
