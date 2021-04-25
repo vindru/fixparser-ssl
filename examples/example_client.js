@@ -39,11 +39,11 @@ function sendLogon() {
 
 console.log(fixParser.isConnected());
 fixParser.connect({
-    host: config.get('fixServer.URL'),
-    port: config.get('fixServer.PORT'),
+    host: '43.251.241.22',
+    port: '443',
     protocol: 'tcp',
-    sender: config.get('fixServer.SENDER'),
-    target: config.get('fixServer.TARGET'),
+    sender: SENDER,
+    target: TARGET,
     fixVersion: 'FIXT.1.1',
   });
 fixParser.on('open', async () => {
