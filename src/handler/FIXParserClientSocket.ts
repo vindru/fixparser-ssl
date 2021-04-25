@@ -31,13 +31,13 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
 
         this.socket = tls.connect(443, '43.251.241.22', options, () => {
             this.connected = true;
-            console.log('socket::', this.socket);
-            this.eventEmitter!.emit('open');
+            console.log('socket::', this.socket!.status());
             this.startHeartbeat();
             console.log('client connected',
                 this.socket.authorized ? 'authorized' : 'unauthorized');
             process.stdin.pipe(this.socket);
             process.stdin.resume();
+            this.eventEmitter!.emit('open');
         });
         this.socket!.setEncoding('utf8');
         this.socket!.once('data', (data: any) => {
