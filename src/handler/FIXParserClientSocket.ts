@@ -30,7 +30,7 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             rejectUnauthorized: false,
         };
 
-        this.socket = tls.connect(443, '43.251.241.22', options, () => {
+        this.socket = tls.connect(443, '43.251.241.2', options, () => {
             this.connected = true;
             console.log('socket::', this.socket);
             this.startHeartbeat();
@@ -56,7 +56,9 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             this.eventEmitter!.emit('close');
             this.stopHeartbeat();
         });
-
+        this.socket!.once('secure', (e: any) => {
+            console.log('asdasdasdasdasdasdasdasdasdasdasd',e)
+        });
         this.socket!.once('timeout', () => {
             this.connected = false;
             this.eventEmitter!.emit('timeout');
