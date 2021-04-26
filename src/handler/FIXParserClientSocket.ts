@@ -13,7 +13,6 @@ import Message from '../message/Message';
 import FIXParserClientBase from './FIXParserClientBase';
 import tls, { TLSSocket } from 'tls';
 import fs from 'fs';
-import FrameDecoder from '../util/FrameDecoder';
 
 export default class FIXParserClientSocket extends FIXParserClientBase {
     private connected: boolean = false;
@@ -30,13 +29,14 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             rejectUnauthorized: false,
         };
 
-        this.socket = tls.connect(443, '43.251.241.2', options, () => {
+        this.socket = tls.connect(443, '43.251.241.22', options, () => {
             this.connected = true;
-            console.log('socket::', this.socket);
+            this.eventEmitter!.emit('open');
             this.startHeartbeat();
             console.log('client connected',
                 this.socket.authorized ? 'authorized' : 'unauthorized');
-            this.eventEmitter!.emit('open');
+            process.stdin.pipe(this.socket);
+            process.stdin.resume();
         });
         this.socket!.setEncoding('utf8');
         this.socket!.once('data', (data: any) => {
@@ -56,9 +56,7 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
             this.eventEmitter!.emit('close');
             this.stopHeartbeat();
         });
-        this.socket!.once('secure', (e: any) => {
-            console.log('asdasdasdasdasdasdasdasdasdasdasd',e)
-        });
+
         this.socket!.once('timeout', () => {
             this.connected = false;
             this.eventEmitter!.emit('timeout');
