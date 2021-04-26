@@ -37,11 +37,12 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
                 this.socket.authorized ? 'authorized' : 'unauthorized');
             process.stdin.pipe(this.socket);
             process.stdin.resume();
-        });
-        this.socket!.setEncoding('utf8');
-        this.socket!.once('data', (data: any) => {
-            console.log('Parser received: ',data);
-            this.eventEmitter!.emit('message', data);
+
+            this.socket!.setEncoding('utf8');
+            this.socket!.once('data', (data: any) => {
+                console.log('Parser received: ',data);
+                this.eventEmitter!.emit('message', data);
+            });
         });
 
         this.socket!.once('error', (error: any) => {
