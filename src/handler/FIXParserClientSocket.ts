@@ -40,24 +40,24 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
         });
 
         this.socket!.setEncoding('utf8');
-        this.socket!.once('data', (data: any) => {
+        this.socket!.on('data', (data: any) => {
             console.log('Parser received: ',data);
             this.eventEmitter!.emit('message', data);
         });
-        this.socket!.once('error', (error: any) => {
+        this.socket!.on('error', (error: any) => {
             console.log('Parser error: ',this.socket);
             this.connected = false;
             this.eventEmitter!.emit('error', error);
             this.stopHeartbeat();
         });
 
-        this.socket!.once('close', () => {
+        this.socket!.on('close', () => {
             this.connected = false;
             this.eventEmitter!.emit('close');
             this.stopHeartbeat();
         });
 
-        this.socket!.once('timeout', () => {
+        this.socket!.on('timeout', () => {
             this.connected = false;
             this.eventEmitter!.emit('timeout');
             this.socket!.end();
