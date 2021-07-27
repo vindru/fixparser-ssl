@@ -24,12 +24,12 @@ export default class FIXParserClientSocket extends FIXParserClientBase {
     public connect() {
         const options = {
             // Necessary only if using the client certificate authentication
-            key: fs.readFileSync('etf_key.pem'),
-            cert: fs.readFileSync('etf_con_utr8.pem'),
+            key: this.key,
+            cert: this.cert,
             rejectUnauthorized: false,
         };
 
-        this.socket = tls.connect(443, '43.251.241.22', options, () => {
+        this.socket = tls.connect(this.port, this.host, options, () => {
             this.connected = true;
             this.eventEmitter!.emit('open');
             this.startHeartbeat();

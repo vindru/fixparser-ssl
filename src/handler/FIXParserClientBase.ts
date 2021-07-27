@@ -16,11 +16,13 @@ import FIXParser from '../FIXParser';
 import Message from '../message/Message';
 
 export default class FIXParserClientBase extends EventEmitter {
-    public host: string | null = null;
-    public port: number | null = null;
+    public host: string = '';
+    public port: number = 443;
     public client = null;
     public sender: string | null = null;
     public target: string | null = null;
+    public cert: any | null = null;
+    public key: any | null = null;
     public heartBeatInterval: number | undefined;
     public heartBeatIntervalId: any | null = null;
     public fixVersion: string = 'FIX.5.0SP2';

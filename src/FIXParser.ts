@@ -46,6 +46,8 @@ export default class FIXParser extends EventEmitter {
         target = 'TARGET',
         heartbeatIntervalMs = 30000,
         fixVersion = this.fixVersion,
+        key,
+        cert
     }: {
         host: string;
         port: number;
@@ -54,6 +56,8 @@ export default class FIXParser extends EventEmitter {
         target: string;
         heartbeatIntervalMs: number;
         fixVersion: string;
+        cert: any;
+        key: any;
     }) {
         if (protocol === 'tcp') {
             this.clientHandler = new FIXParserClientSocket(this, this);
@@ -68,6 +72,8 @@ export default class FIXParser extends EventEmitter {
         this.clientHandler!.target = target;
         this.clientHandler!.heartBeatInterval = heartbeatIntervalMs;
         this.clientHandler!.fixVersion = fixVersion;
+        this.clientHandler!.key = key;
+        this.clientHandler!.cert = cert;
         this.clientHandler!.connect();
     }
 
